@@ -62,6 +62,9 @@ class heap:
                 return
             self.__heapify_down(arr, index)
 
+    '''
+    Push a new element onto the heap
+    '''
     def push(self,ele):
         if len(self._h) == 0:
             self._h.insert(0,ele)
@@ -69,24 +72,72 @@ class heap:
             self._h.append(ele)
             self.__heapify_up(self._h, len(self._h)-1)
 
+    '''
+    Pop and return the top of the heap
+    '''
     def pop(self):
-        r = self._h[0]
         if len(self._h) == 0:
             return None
         else:
-            r = self._h.pop()
-            self._h[0] = r
+            r = self._h[0] # grab top
+            self._h[0] = self._h.pop(-1) # replace top with bottom
             self.__heapify_down(self._h, 0)
         return r
 
+    def peek(self):
+        return self._h[0]
+
+    '''
+    Delete at a specific index by replacing it with the last element in the heap, removing the last element, and calling
+    heapify_down at the replaced index
+    '''
+    def delete_at(self,index):
+        print('heap.delete_at({})'.format(index))
+        r = self._h[index]
+        x = self._h[-1]
+        self._h[index] = x # grab the last element and heapify_down
+        self._h.pop(-1)
+        self.__heapify_down(self._h,index)
+        return r
+
+    '''
+    Find, delete, and return an elemenet from the heap
+    Return None if not found
+    '''
+    def delete(self,ele):
+        print('heap.delete({})'.format(ele))
+        r = None
+        for n in range(0,len(self._h)):
+            print('self._h[{0}] == {1}'.format(n, self._h[n]))
+            if self._comp(self._h[n],ele) == 0:
+                r = self.delete_at(n)
+                break
+        return r
+
+    '''
+    Extend the heap by an iterable
+    '''
+    def extend(self,iterable):
+        for ele in iterable:
+            self.push(ele)
+
 
 def maximum_in_window(arr,w_size):
-    cur_max = arr[0] # assume its the first value
-    for index in range(0,len(arr)):
-        print('arr[{0}]={1}'.format(index,arr[index]))
+    print('maximum_in_window(arr={0},w_size={1})'.format(arr,w_size))
+    max_list = []
+    max_heap = heap(max_comp)
+    max_heap.extend(arr[0:w_size]) # grab the first window
+    for index in range(w_size,len(arr)):
+        max_list.append(max_heap.peek())
+        max_heap.push(arr[index])
+        max_heap.delete(arr[index-(w_size)])
+    max_list.append(max_heap.peek())
+    return max_list
 
-if __name__ == '__main__':
-    arr=[-4,2,-5,3,6]
+'''
+Debug function for showing heap functionality
+'''
+def show_heap():
     nums=[4,1,2,10,3]
     max_heap = heap(max_comp)
     min_heap = heap(min_comp)
@@ -99,4 +150,11 @@ if __name__ == '__main__':
     min_heap.pop()
     print(max_heap)
     print(min_heap)
-    # maximum_in_window(arr,3)
+    max_heap.delete(3)
+    print(max_heap)
+
+if __name__ == '__main__':
+    arr=[10,2,-5,3,6]
+    # show_heap()
+    m_list = maximum_in_window(arr,3)
+    print(m_list)
