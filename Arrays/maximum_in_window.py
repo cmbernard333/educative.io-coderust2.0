@@ -6,6 +6,10 @@ if x.compareTo(y) returns >=0 then y comes before x
 if x.compareTo(y) returns ==0 then x and y are the same
 '''
 
+import time
+import random
+from collections import deque
+
 def min_comp(x,y):
     if x == y:
         return 0
@@ -17,7 +21,7 @@ def min_comp(x,y):
 
 def max_comp(x,y):
     if x == y:
-        return 0
+        return 0    
     m = max(x,y)
     if m == x:
         return -1
@@ -51,7 +55,7 @@ class heap:
         if index < len(arr)-1: # index is resolvable
             left_child = index*2+1 # root at 0
             right_child = index*2+2 # root at 0
-            print('__heapify_down: arr={0}, index={1}, left_child={2}, right_child={3}'.format(arr,index,left_child,right_child))
+            # print('__heapify_down: arr={0}, index={1}, left_child={2}, right_child={3}'.format(arr,index,left_child,right_child))
             if left_child < len(arr) and self._comp(arr[index], arr[left_child]) > 0: # left_child is inside the array - including the final index
                 self.__swap(arr,index,left_child) 
                 index = left_child
@@ -92,7 +96,7 @@ class heap:
     heapify_down at the replaced index
     '''
     def delete_at(self,index):
-        print('heap.delete_at({})'.format(index))
+        # print('heap.delete_at({})'.format(index))
         r = self._h[index]
         x = self._h[-1]
         self._h[index] = x # grab the last element and heapify_down
@@ -105,10 +109,10 @@ class heap:
     Return None if not found
     '''
     def delete(self,ele):
-        print('heap.delete({})'.format(ele))
+        # print('heap.delete({})'.format(ele))
         r = None
         for n in range(0,len(self._h)):
-            print('self._h[{0}] == {1}'.format(n, self._h[n]))
+            # print('self._h[{0}] == {1}'.format(n, self._h[n]))
             if self._comp(self._h[n],ele) == 0:
                 r = self.delete_at(n)
                 break
@@ -123,7 +127,7 @@ class heap:
 
 
 def maximum_in_window(arr,w_size):
-    print('maximum_in_window(arr={0},w_size={1})'.format(arr,w_size))
+    # print('maximum_in_window(arr={0},w_size={1})'.format(arr,w_size))
     max_list = []
     max_heap = heap(max_comp)
     max_heap.extend(arr[0:w_size]) # grab the first window
@@ -133,6 +137,65 @@ def maximum_in_window(arr,w_size):
         max_heap.delete(arr[index-(w_size)])
     max_list.append(max_heap.peek())
     return max_list
+
+class Timer:
+
+    def __init__(self):
+        self._start = 0
+        self._end = 0
+        self._elapsed = 0
+
+    def start(self):
+        self._start = time.time()
+        self._end = 0
+
+    def end(self):
+        self._end = time.time()
+
+    def elapsed(self):
+        return self._end - self._start
+
+def maximum_in_window_list(arr, w_size):
+    # print('maximum_in_window(arr={0},w_size={1})'.format(arr,w_size))
+    max_list = []
+    for index in range(0,(len(arr)-w_size)+1): # window cannot exceed the bounds of the list
+        cur_win_max = arr[index]
+        #print('index={}'.format(index))
+        #print('window={}'.format(arr[index:index+w_size]))
+        for n in arr[index:index+w_size]: # using slices is cheating but it works in python :)
+            if cur_win_max < n:
+                cur_win_max = n
+        #print ('max in window = {}'.format(cur_win_max))
+        max_list.append(cur_win_max)
+    return max_list
+
+def find_max_sliding_window(arr, window_size):
+    if window_size > len(arr):
+        return
+
+    window = deque()
+
+    #find out max for first window
+    for i in range(0, window_size):
+        while window and arr[i] >= arr[window[-1]]:
+            window.pop()
+        window.append(i)
+
+    print(arr[window[0]])
+
+    for i in range(window_size, len(arr)):
+    #remove all numbers that are smaller than current number
+    #from the tail of list
+        while window and arr[i] >= arr[window[-1]]:
+            window.pop()
+
+        #remove first number if it doesn't fall in the window anymore
+        if window and (window[0] <= i - window_size) :
+            window.popleft()
+
+    window.append(i)
+    print(arr[window[0]])
+
 
 '''
 Debug function for showing heap functionality
@@ -155,6 +218,33 @@ def show_heap():
 
 if __name__ == '__main__':
     arr=[10,2,-5,3,6]
+    r = []
+    for n in range(0,60):
+        r.append(random.randint(0,100))
     # show_heap()
-    m_list = maximum_in_window(arr,3)
+
+    t = Timer()
+    # using heap
+    t.start()
+    m_list = maximum_in_window(r,3)
+    t.end()
+    print(t.elapsed())
     print(m_list)
+    print('------------------------------------------------------')
+
+    # using list
+    t.start()
+    m_list = maximum_in_window_list(r,3)
+    t.end()
+    print(t.elapsed())
+    print(m_list)
+    print('------------------------------------------------------')
+
+    # using double linked list
+    t.start()
+    m_list = find_max_sliding_window(r,3)
+    t.end()
+    print(t.elapsed())
+    print(m_list)
+    print('------------------------------------------------------')
+    
