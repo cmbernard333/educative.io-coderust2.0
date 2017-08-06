@@ -21,9 +21,13 @@ def binary_search_iter(arr, ele, l ,h):
             h = mid
     return -1
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     arr = [2,5,8,9,11,13]
     find = [1,2,3,4,5]
     print(arr)
+    print('Recursive')
     for value in find: 
-        print("arr[{0}] == {1}".format(binary_search(arr,value,0,len(arr)-1), value))
+        print('arr[{0}] == {1}'.format(binary_search(arr,value,0,len(arr)-1), value))
+    print('Iterative')
+    for value in find:
+        print('arr[{0}] == {1}'.format(binary_search_iter(arr,value,0,len(arr)-1), value))
