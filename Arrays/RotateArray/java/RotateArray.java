@@ -19,18 +19,23 @@ public class RotateArray {
 
     public <T> void reverse(T [] arr, int start, int end)
     {
-        int size = end - start;
+        System.out.println("--- Reverse arr="+Arrays.toString(arr)+" from "+start+" to "+end+" ----");
+        int size = end; // you don't use absolute size because we are counting from the back
         for(int i = end; i > ((size)/2); i--)
         {
-            swap(arr,i, (size)-i);
+            // System.out.println(String.format("Swapping arr[%d]=%d, arr[%d]=[%d]",i, arr[i], (size-i), arr[size-i]));
+            swap(arr, i, ((end)-i)+start); // have to add start in case start isn't 0 - we don't want negative indices
         }
+        System.out.println("--- Reverse ----");
     }
 
     public <T> void rotateArray(T [] arr, int rotate)
     {
-        this.reverse(arr,0,arr.length-1);
-        this.reverse(arr,0,rotate-1);
-        this.reverse(arr,rotate,arr.length-1);
+        this.reverse(arr,0,arr.length-1); // reverse the whole thing
+        System.out.println(Arrays.toString(arr));
+        this.reverse(arr,0,rotate-1); // reverse the elements included in the rotation
+        System.out.println(Arrays.toString(arr));
+        this.reverse(arr,rotate,arr.length-1); // reverse the upper half back to original order
         return;
     }
 
@@ -38,13 +43,11 @@ public class RotateArray {
     {
         /* this has to be the Integer wrapper type because you can't convert from primitives to objects */
         Integer hello[] = {1,10,20,0,59,86,32,11,9,40};
-        Integer trivial[] = {1,2,3};
         RotateArray r = new RotateArray();
         System.out.println(Arrays.toString(hello));
-        r.reverse(hello,0,hello.length-1);
-        r.reverse(trivial,0,trivial.length-1);
-        System.out.println(Arrays.toString(hello));
-        System.out.println(Arrays.toString(trivial));
+        // r.reverse(hello,0,hello.length-1);
         r.rotateArray(hello, 2);
+        System.out.println(Arrays.toString(hello));
+        
     }
 }
