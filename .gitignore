@@ -1,0 +1,5 @@
+*.class
+a.out
+.vscode
+build/
+*.dSYM/
