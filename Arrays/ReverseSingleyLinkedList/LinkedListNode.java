@@ -37,13 +37,17 @@ class LinkedListNode<E> {
     */
     public static <E> LinkedListNode<E> reverse(LinkedListNode<E> head) {
         LinkedListNode<E> cur = head;
-        LinkedListNode<E> prev = head;
-        while(cur.getNext()!=null)
+        LinkedListNode<E> prev = head, next = null;
+        /* prev starts at head */
+        while(cur != null)
         {
-            prev = cur;
-            cur = cur.getNext(); // grab the next pointer first
+            cur = cur.getNext(); // grab the next pointer
+            next = cur.getNext(); // grab the next-next pointer
             cur.setNext(prev); // set next pointer to previous pointer
+            prev = cur;
+            cur = next;
         }
+        head.setNext(null);
         return cur;
     }
 
@@ -67,7 +71,7 @@ class LinkedListNode<E> {
         }
         // reverse a linked list
         System.out.println(head);
-        LinkedListNode.reverse(head);
+        head = LinkedListNode.reverse(head);
         System.out.println(head);
     }
 }
