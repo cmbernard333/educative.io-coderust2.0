@@ -7,8 +7,12 @@ typedef unsigned int uint32;
 #define ARR_SIZE(x) (sizeof(x)/sizeof(x[0]))
 
 template<typename T>
-void print_arr(T* arr, std::size_t size)
+void print_arr(const  T* arr, std::size_t size, const std::string& msg = "")
 {
+    if(msg != "")
+    {
+        std::cout<<msg<<std::endl;
+    }
     std::cout<<"{";
     for(int i = 0;i<size;i++)
     {
@@ -94,9 +98,10 @@ int main(int argc, char** argv)
 {
     int arr[10] = {-10,27,3,5,1,22,63,14,100,90};
     ComprarFunc<int> f = sort_descending_int;
-    print_arr(arr,10);
-    // quicksort(arr,0,ARR_SIZE(arr)-1,SortAscending());
+    print_arr(arr,10,"unsorted");
+    quicksort(arr,0,ARR_SIZE(arr)-1,f);
+    print_arr(arr,10,"descending");
     quicksort(arr,0,ARR_SIZE(arr)-1,SortAscending());
-    print_arr(arr,10);
+    print_arr(arr,10,"ascending");
     return 0;
 }
