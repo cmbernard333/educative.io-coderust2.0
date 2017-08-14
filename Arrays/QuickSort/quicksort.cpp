@@ -59,9 +59,11 @@ int partition(T* arr, uint32 start, uint32 end, Comparator comprar)
     while(i < j) 
     {
         /* while we don't pass the upper one and the value we are at shouldn't pass the pivot */
-        while(i <= end && arr[i] <= pivot) i++;
+        // while(i <= end && arr[i] <= pivot) i++;
+        while(i <= end && comprar(arr[i],pivot) <= 0) i++;
         /* while we are greater than the pivot move left */
-        while(arr[j] > pivot) j--;
+        // while(arr[j] > pivot) j--;
+        while(comprar(arr[j],pivot) > 0) j--;
 
         /* if we should swap these lets do it */
         if(i < j)
@@ -97,7 +99,7 @@ int main(int argc, char** argv)
     ComprarFunc<int> f = sort_descending_int;
     print_arr(arr,10);
     // quicksort(arr,0,ARR_SIZE(arr)-1,SortAscending());
-    quicksort(arr,0,ARR_SIZE(arr)-1,f);
+    quicksort(arr,0,ARR_SIZE(arr)-1,SortAscending());
     print_arr(arr,10);
     return 0;
 }
