@@ -61,15 +61,15 @@ template <> struct delete_it<bool>
 
 
 template<typename T>
-struct linked_list_head {
+struct LinkedListHead {
 
-    linked_list_head(const T& ele) : data(ele) {
+    LinkedListHead(const T& ele) : data(ele) {
         next = nullptr;
     }
 
-    ~linked_list_head()
+    ~LinkedListHead()
     {
-        linked_list_head* cur = this;
+        LinkedListHead* cur = this;
         while(cur->next != nullptr)
         {
             delete_it<T>::do_delete(data); // call destructor
@@ -79,6 +79,132 @@ struct linked_list_head {
     }
 
     /* struct memebers are public by default */
-    linked_list_head<T>* next;
+    LinkedListHead<T>* next;
     const T& data;
 };
+
+template<typename T>
+static void frontbacksplit(LinkedListHead<T>* src, LinkedListHead<T>** front, LinkedListHead<T>** back)
+{
+    /*
+        need to split the list in two for mergesort
+        10->1->2->8->7->87->20
+
+        start = 0
+        end = 6
+
+        (start + end)/2 = 3
+
+        sublists:
+
+        lower:          upper:
+
+        10->1->2->8    7->87->20
+
+        since linkedlists typically do not have a size param and are not allocated contiguously - then you have to find the midpoint manually
+    */
+
+    LinkedListHead<T>* slow = nullptr;
+    LinkedListHead<T>* fast = nullptr;
+
+    /* base case - single value in a list */
+    if( src == nullptr || src->next == nullptr)
+    {
+        *front = src;
+        *back = nullptr;
+    }
+    else
+    {
+        slow = src;
+        fast = slow->next;
+
+        while(fast != nullptr)
+        {
+            /* advance fast by two and slow by one */
+            fast = fast->next;
+            if(fast != nullptr)
+            {
+                slow = slow->next;
+                fast = fast->next;
+            }
+        }
+
+        /* just before mid point, split into two - this modifies the src list */
+        *front = src;
+        *back = slow->next;
+        slow->next = nullptr;
+    }
+}
+
+template<typename T, class Comparator>
+LinkedListHead<T>* mergelist(LinkedListHead<T>* lstA, LinkedListHead<T>*lstB, Comparator comprar)
+{
+    /* head of the left list */
+    LinkedListHead<T>* lstA_ptr = lstA;
+    /* head of the right list */
+    LinkedListHead<T>* lstB_ptr = lstB;
+    /* head of the merged list and the current pointer in the merged list */
+    LinkedListHead<T>* lstMerge_ptr_head = nullptr, *lstMerge_ptr = lstMerge_ptr_head;
+    /* the ptr ot the current place in the merged list */
+    LinkedListHead<T>* tmp = nullptr;
+
+    while( lstA_ptr != nullptr && lstB_ptr != nullptr )
+    {
+        /* the node in list a comes before the node in list b */
+        if(comprar(lstA_ptr->data,lstB_ptr->data) <= 0)
+        {
+            tmp = lstA_ptr;
+            lstA_ptr = lstA_ptr->next;
+        }
+        /* the node in list b comes before the node in list a */
+        else
+        { 
+            tmp = lstB_ptr;
+            lstB_ptr = lstB_ptr->next;
+        }
+
+        /* set the head or set the next ptr */
+        if(lstMerge_ptr_head == nullptr)
+        {
+            lstMerge_ptr_head = tmp;
+        }
+        else
+        {
+            lstMerge_ptr->next = tmp;
+        } 
+
+        /* advance ahead */
+        lstMerge_ptr = lstMerge_ptr->next;
+    }
+
+    /* TODO - merge remaining elements in one of the lists - probably list A */
+    while((tmp = lstA_ptr) != nullptr)
+    {
+        /* add to the list */
+        lstMerge_ptr->next = tmp;
+        /* advance the list a ptr */
+        lstA_ptr = lstA_ptr->next;
+        /* advance the merge list ptr */
+        lstMerge_ptr = lstMerge_ptr->next;
+    }
+
+    /* cap the end of the list */
+    lstMerge_ptr->next = nullptr;
+
+    return lstMerge_ptr_head;
+}
+
+template<typename T, class Comparator>
+void mergesort(LinkedListHead<T>** start, Comparator comprar)
+{
+    LinkedListHead<T>* head = *start;
+    LinkedListHead<T>* a = nullptr, *b = nullptr;
+    if((head == nullptr) || (head->next == nullptr))
+    {
+        return;
+    }
+    frontbacksplit(head, &a, &b);
+    mergesort(&a, comprar);
+    mergesort(&b, comprar);
+    *start = mergelist(a, b, comprar);
+}
