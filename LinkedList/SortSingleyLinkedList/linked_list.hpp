@@ -104,8 +104,8 @@ static void frontbacksplit(LinkedListHead<T>* src, LinkedListHead<T>** front, Li
         since linkedlists typically do not have a size param and are not allocated contiguously - then you have to find the midpoint manually
     */
 
-    LinkedListHead<T>* slow = nullptr;
     LinkedListHead<T>* fast = nullptr;
+	LinkedListHead<T>* slow = nullptr;
 
     /* base case - single value in a list */
     if( src == nullptr || src->next == nullptr)
@@ -144,14 +144,14 @@ LinkedListHead<T>* mergelist(LinkedListHead<T>* lstA, LinkedListHead<T>*lstB, Co
     /* head of the right list */
     LinkedListHead<T>* lstB_ptr = lstB;
     /* head of the merged list and the current pointer in the merged list */
-    LinkedListHead<T>* lstMerge_ptr_head = nullptr, *lstMerge_ptr = lstMerge_ptr_head;
+    LinkedListHead<T>* lstMerge_ptr_head = nullptr, *lstMerge_ptr = nullptr;
     /* the ptr ot the current place in the merged list */
     LinkedListHead<T>* tmp = nullptr;
 
     while( lstA_ptr != nullptr && lstB_ptr != nullptr )
     {
         /* the node in list a comes before the node in list b */
-        if(comprar(lstA_ptr->data,lstB_ptr->data) <= 0)
+        if(comprar(lstA_ptr->data, lstB_ptr->data) <= 0)
         {
             tmp = lstA_ptr;
             lstA_ptr = lstA_ptr->next;
@@ -167,14 +167,14 @@ LinkedListHead<T>* mergelist(LinkedListHead<T>* lstA, LinkedListHead<T>*lstB, Co
         if(lstMerge_ptr_head == nullptr)
         {
             lstMerge_ptr_head = tmp;
+			lstMerge_ptr = lstMerge_ptr_head;
         }
         else
         {
             lstMerge_ptr->next = tmp;
-        } 
-
-        /* advance ahead */
-        lstMerge_ptr = lstMerge_ptr->next;
+			/* advance to the element just added */
+			lstMerge_ptr = lstMerge_ptr->next;
+        }
     }
 
     /* TODO - merge remaining elements in one of the lists - probably list A */

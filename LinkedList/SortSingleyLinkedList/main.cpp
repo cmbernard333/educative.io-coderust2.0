@@ -23,5 +23,9 @@ int main(int argc, char **argv)
     }
     cur = &head;
     mergesort(&cur, f);
+	for (;cur != nullptr; cur = cur->next)
+	{
+		std::cout << cur->data << ((cur->next != nullptr) ? "->" : "\n");
+	}
     return 0;
 }
