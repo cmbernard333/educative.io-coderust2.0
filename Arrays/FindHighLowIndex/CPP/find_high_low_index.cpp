@@ -2,6 +2,28 @@
 #include <cstdlib>
 #include <vector>
 #include <utility>
+#include <chrono>
+
+class Timer
+{
+public:
+    Timer() {}
+
+    void start() 
+    {
+        this->chrono_start_time = std::chrono::high_resolution_clock::now();
+    }
+
+    double elapsed()
+    {
+        std::chrono::seconds seconds = std::chrono::duration_cast<std::chrono::seconds>( std::chrono::high_resolution_clock::now() - this->chrono_start_time;
+        return elapsed_seconds.count();
+    }
+
+private:
+    /* c++11 extension */
+    std::chrono::high_resolution_clock::time_point chrono_start_time;
+};
 
 /*
 Given a sorted array of integers, return the low and high index of the given key. Return -1 if not found. The array length can be in millions with lots of duplicates.
@@ -78,18 +100,20 @@ std::pair<int,int> find_high_low_index(const std::vector<T>& vec, T& key)
     /* the high or low index could be the first one found */
     low_index = r;
     high_index = r;
-    /* search to the right of it - (r+1) because we already found it at mid_index*/
-    std::cout<<"Key="<<key<<" Mid_index="<<mid_index<<std::endl;
-    while( (r = binary_search(vec,r+1,vec.size()-1,key)) != -1)
+    if(mid_index != -1)
     {
-        high_index = r; 
-    }
-    /* reset */
-    r = mid_index;
-    /* search to the left of it - (r-1) because we already found it at mid_index */
-    while( (r = binary_search(vec,0,r-1,key)) != -1)
-    {
-        low_index = r;
+        /* search to the right of it - (r+1) because we already found it at mid_index*/ 
+        while( (r = binary_search(vec,r+1,vec.size()-1,key)) != -1)
+        {
+            high_index = r; 
+        }
+        /* reset */
+        r = mid_index;
+        /* search to the left of it - (r-1) because we already found it at mid_index */
+        while( (r = binary_search(vec,0,r-1,key)) != -1)
+        {
+            low_index = r;
+        }
     }
 
     return std::make_pair(low_index,high_index);
@@ -99,12 +123,17 @@ int main(int argc, char** argv)
 {
     // std::vector<int> vec = {1, 2, 5, 5, 5, 5, 5, 5, 5, 5, 20}; // requires c++11 > --std=c++11
     std::vector<int> vec = {1,1,2,2,3,4,4,5}; // requires c++11 > --std=c++11
-    std::vector<int> find = {1, 2, 3, 4, 5}; // requires c++11 > --std=c++11
+    std::vector<int> find = {1,2,5,6,7,8,10,20}; // requires c++11 > --std=c++11
     std::pair<int,int> found;
+    Timer t;
+
+    t.start();
     for(auto i : find)
     {
         found = find_high_low_index(vec,i);
         std::cout<<"Key: "<<i<<" Low=("<<found.first<<") and High=("<<found.second<<")"<<std::endl;
     }
+    t.end();
+    std::cout<<"Executed in "<< t.elapsed() << "seconds" << std::endl;  
     return 0;
 }
