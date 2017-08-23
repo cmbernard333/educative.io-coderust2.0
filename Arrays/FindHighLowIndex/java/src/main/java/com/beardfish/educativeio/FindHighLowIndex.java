@@ -59,9 +59,10 @@ public class FindHighLowIndex {
 
     public static void main (String [] args) {
         List<Integer> someIntegers = Arrays.asList(1,2,3,5,10,27,82,100);
-        List<Integer> someMoreIntegers = Arrays.asList(1,2,2,2,5,6,7,7,7,8,10,10);
+        List<Integer> someMoreIntegers = Arrays.asList(1,2,5,5,5,5,5,5,5,5,20);
         IntegerComparator intComparator = new IntegerComparator();
         Pair<Integer,Integer> lowHigh = null;
+        Timer timer = new Timer();
 
         /* java 8 streams approach + lambdas for printing a list - handy */
         someIntegers.stream().forEach((k)->System.out.print(k + " "));
@@ -74,11 +75,15 @@ public class FindHighLowIndex {
             System.out.println(String.format("Found %d at index %d",val,found));
         }
 
-        for(Integer val : Arrays.asList(1,2,5,6,7,8,10))
+        timer.start();
+        for(Integer val : Arrays.asList(1,2,5,6,7,8,10,20))
         {
             lowHigh = FindHighLowIndex.findHighLowIndex(someMoreIntegers,0,someMoreIntegers.size()-1,val,intComparator);
             System.out.println(String.format("Found %d at low (%d) and high (%d)", val, lowHigh.getLeft(), lowHigh.getRight()));
         }
+        timer.end();
+
+        System.out.println(String.format("Executed in %f seconds",timer.elapsedSeconds()));
         
     }
 
