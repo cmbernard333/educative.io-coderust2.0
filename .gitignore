@@ -5,3 +5,5 @@ build/
 *.dSYM/
 .gradle/
 __pycache__/
+*.exe
+*.obj
