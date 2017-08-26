@@ -40,6 +40,8 @@ public class MoveZerosLeft {
         int writer = arr.length - 1;
         for(int i = arr.length - 1 ; i >= 0 ; i--)
         {
+            /* swap this to == 0 to move zeros to the right */
+            /* swap this to != 0 to move zeros to the left */
             if ( arr [i] != 0 )
             {
                 swap(arr, i, writer);
@@ -58,12 +60,18 @@ public class MoveZerosLeft {
 
     public static void main(String [] args)
     {
-        int [] arr = {1, 10, 20, 0, 59, 63, 0, 88, 0};
-        int [] arrTwo = { 0, 8, 9, 22, 0, 99, 200};
-        int [] pair = {1,0};
+        int [] arr = { 1, 10, 20, 0, 59, 63, 0, 88, 0 };
+        int [] arrTwo = { 0, 8, 9, 22, 0, 99, 200 };
+        int [] arrThree = { 0, 3, 80 };
+        int [] arrNoZeros = { 1, 2, 3, 4, 5 };
+        int [] pair = { 1, 0 };
+        int [] pairNoZeros = { 1, 2 };
 
         printMoveZerosLeft(arr);
         printMoveZerosLeft(arrTwo);
+        printMoveZerosLeft(arrThree);
+        printMoveZerosLeft(arrNoZeros);
         printMoveZerosLeft(pair);
+        printMoveZerosLeft(pairNoZeros);
     }
 }

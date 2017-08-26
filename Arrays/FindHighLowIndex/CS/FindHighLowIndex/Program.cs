@@ -44,8 +44,23 @@ namespace FindHighLowIndex
         private string _LastName;
     }
 
+
     class Program
     {
+
+		static string CreateGreeting(string name = "")
+		{
+			if (String.IsNullOrEmpty(name))
+			{
+				return $"All people come here for the same reason!";
+			}
+			else
+			{
+				return $"Huh ha! Atleast you know your own name {name}";
+			}
+
+		}
+
         static void Main(string[] args)
         {
             // strings in C# are immutable just like in java
@@ -77,6 +92,10 @@ namespace FindHighLowIndex
             Person person = new Person("Seymour", "Butts");
             Console.WriteLine(person.FullName());
             Console.WriteLine($"First name = {person.FirstName}, Last name = {person.LastName}");
+
+            // Calling a function with an optional parameter
+            Console.WriteLine(CreateGreeting());
+            Console.WriteLine(CreateGreeting("Solaire!"));
         }
     }
 }
