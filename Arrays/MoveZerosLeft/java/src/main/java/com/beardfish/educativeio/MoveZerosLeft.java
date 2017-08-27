@@ -42,6 +42,7 @@ public class MoveZerosLeft {
         {
             /* swap this to == 0 to move zeros to the right */
             /* swap this to != 0 to move zeros to the left */
+            /* if there are no zeros it will just swap it with itself */
             if ( arr [i] != 0 )
             {
                 swap(arr, i, writer);
