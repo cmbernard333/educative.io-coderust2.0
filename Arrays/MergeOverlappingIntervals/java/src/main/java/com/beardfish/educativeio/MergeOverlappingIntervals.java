@@ -31,19 +31,15 @@ public class MergeOverlappingIntervals {
         int start = -1;
         int end = -1;
         Pair<Integer,Integer> mergedInterval = null;
-        /* example 1,5 & 3,7 */
-        /* example 1,7 & 4,6 */
+        /* example 1,5 & 3,7 - overlap */
+        /* example 1,7 & 4,6 - overlap */
+        /* example 1,7 & 8,10 - do not overlap */ 
 
-        /* check left values */
-        if ( left.getLeft() <= right.getLeft() ) {
-            start = left.getLeft(); 
-        }
-
-        /* check right values */
-        if ( left.getRight() <= right.getRight() ) {
-            end = right.getRight();
-        } else if ( left.getRight() > right.getRight() ) {
-            end = left.getRight();
+        if (left.getLeft() < right.getRight() &&
+                left.getRight() >= right.getLeft())
+        {
+            start = Math.min(left.getLeft(), right.getLeft());
+            end = Math.max(left.getRight(), right.getRight());
         }
 
         if ( start == -1 || end == -1)
@@ -67,6 +63,7 @@ public class MergeOverlappingIntervals {
             System.out.println("curInterval->"+curInterval+", getInterval->"+intervals.get(i)+", tmp->"+tmp);
             if ( tmp.getLeft() == -1 || tmp.getRight() == -1)
             {
+                /* TODO: we are missing an interval here - we need to make sure non-mergable intervals are added */
                 mergedIntervals.add(curInterval);
             } else {
                 curInterval = tmp;
@@ -76,7 +73,7 @@ public class MergeOverlappingIntervals {
 
 
         /* may have accumulated an interval - need to add it if it legit */
-        if (tmp.getLeft() != -1 || tmp.getRight() != -1)
+        if (tmp.getLeft() != -1 && tmp.getRight() != -1)
         {
             mergedIntervals.add(curInterval);
         }
