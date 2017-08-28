@@ -34,7 +34,8 @@ import java.util.Arrays;
 
 public class MaximumSingleSellProfit
 {
-    public static int maxSingleSellProfit(int [] arr)
+    // public static int maxSingleSellProfit(int [] arr)
+    public static Pair<Integer,Integer> maxSingleSellProfit(int [] arr)
     {
         /* 
          * single buy/sell activity 
@@ -62,8 +63,10 @@ public class MaximumSingleSellProfit
             }
             j++;
         }
+        System.out.println(String.format("Estimated sale prices %s",Arrays.toString(arr)));
         System.out.println(String.format("Buy={%d}, Sell={%d}. Max profit={%d}",arr[buy],arr[sell],cur_profit));
-        return cur_profit;
+        return new Pair<Integer,Integer>(buy,sell);
+        // return cur_profit;
     }
 
     public static void main (String [] args)
@@ -72,7 +75,6 @@ public class MaximumSingleSellProfit
         int [] exampleStocksTwo = { 8, 5, 13, 9, 19, 20 };
         int [] exampleStocksThree = { 2, 5, 13, 9, 19, 20 };
         int [] exampleStocksFour = { 21, 12, 11, 9, 6, 3 };
-        System.out.println(String.format("Estimated sale prices %s",Arrays.toString(exampleStocksOne)));
         MaximumSingleSellProfit.maxSingleSellProfit(exampleStocksOne);
         MaximumSingleSellProfit.maxSingleSellProfit(exampleStocksTwo);
         MaximumSingleSellProfit.maxSingleSellProfit(exampleStocksThree);
