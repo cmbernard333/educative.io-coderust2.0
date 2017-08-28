@@ -64,6 +64,7 @@ public class MoveZerosLeft {
         int [] arr = { 1, 10, 20, 0, 59, 63, 0, 88, 0 };
         int [] arrTwo = { 0, 8, 9, 22, 0, 99, 200 };
         int [] arrThree = { 0, 3, 80 };
+        int [] arrFour = { 3, 0, 0, 10 };
         int [] arrNoZeros = { 1, 2, 3, 4, 5 };
         int [] pair = { 1, 0 };
         int [] pairNoZeros = { 1, 2 };
@@ -71,6 +72,7 @@ public class MoveZerosLeft {
         printMoveZerosLeft(arr);
         printMoveZerosLeft(arrTwo);
         printMoveZerosLeft(arrThree);
+        printMoveZerosLeft(arrFour);
         printMoveZerosLeft(arrNoZeros);
         printMoveZerosLeft(pair);
         printMoveZerosLeft(pairNoZeros);
