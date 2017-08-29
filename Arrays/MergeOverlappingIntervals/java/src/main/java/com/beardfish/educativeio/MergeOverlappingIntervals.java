@@ -54,29 +54,24 @@ public class MergeOverlappingIntervals {
     public static List<Pair<Integer,Integer>> mergeOverlappingIntervals(List<Pair<Integer,Integer>> intervals)
     {
         List<Pair<Integer,Integer>> mergedIntervals = new ArrayList<>();
-        Pair<Integer,Integer> curInterval = intervals.get(0), tmp = null;
+        Pair<Integer,Integer> curInterval = intervals.get(0), mergeInterval = null;
         /* iterate until you find an interval that doesn't merge with the current one */
         for(int i = 1; i < intervals.size(); i++)
         {
             /* check for overlapping intervals */
-            tmp = MergeOverlappingIntervals.getMergedInterval(curInterval, intervals.get(i));
-            System.out.println("curInterval->"+curInterval+", getInterval->"+intervals.get(i)+", tmp->"+tmp);
-            if ( tmp.getLeft() == -1 || tmp.getRight() == -1)
-            {
-                /* TODO: we are missing an interval here - we need to make sure non-mergable intervals are added */
+            mergeInterval = MergeOverlappingIntervals.getMergedInterval(curInterval, intervals.get(i));
+            if ( mergeInterval.getLeft() == -1 || mergeInterval.getRight() == -1) {
                 mergedIntervals.add(curInterval);
+                curInterval = intervals.get(i);
             } else {
-                curInterval = tmp;
+                curInterval = mergeInterval;
             }
             /* TODO : edge case is end of list or beginning of list or list of one value */
         }
 
-
         /* may have accumulated an interval - need to add it if it legit */
-        if (tmp.getLeft() != -1 && tmp.getRight() != -1)
-        {
-            mergedIntervals.add(curInterval);
-        }
+        System.out.println("End mergeInterval"+mergeInterval);
+        mergedIntervals.add(curInterval);
 
         return mergedIntervals;
     }
@@ -93,7 +88,8 @@ public class MergeOverlappingIntervals {
             new Pair<Integer,Integer>(11,15));
         List<Pair<Integer,Integer>> intervalsThree = MergeOverlappingIntervals.createIntervalList(
             new Pair<Integer,Integer>(1,7),
-            new Pair<Integer,Integer>(8,10));
+            new Pair<Integer,Integer>(8,10),
+            new Pair<Integer,Integer>(11,13));
 
         List<Pair<Integer,Integer>> mergedIntervals = MergeOverlappingIntervals.mergeOverlappingIntervals(intervals);
         List<Pair<Integer,Integer>> mergedIntervalsTwo = MergeOverlappingIntervals.mergeOverlappingIntervals(intervalsTwo);
