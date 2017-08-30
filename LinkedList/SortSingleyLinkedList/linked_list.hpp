@@ -1,5 +1,8 @@
 #pragma once
+#include <iostream>
+#include <sstream>
 #include <cstddef>
+
 
 template <typename T> 
 struct delete_it;
@@ -78,10 +81,32 @@ struct LinkedListHead {
         }
     }
 
+
+
     /* struct memebers are public by default */
     LinkedListHead<T>* next;
     const T& data;
 };
+
+/* toString - provides an override for ostream */
+template<typename T>
+std::ostream& operator<<(std::ostream& o, const LinkedListHead<T>& head)
+{
+    const LinkedListHead<T>* cur = &head;
+    std::stringstream ss;
+
+    while( cur != nullptr )
+    {
+        
+        ss << cur->data;
+        ss << (( cur->next != nullptr ) ? "->" : "");
+        cur = cur->next;
+    }
+
+    return o << ss.str();
+}
+
+/* sorting stuff */
 
 template<typename T>
 static void frontbacksplit(LinkedListHead<T>* src, LinkedListHead<T>** front, LinkedListHead<T>** back)
@@ -134,6 +159,9 @@ static void frontbacksplit(LinkedListHead<T>* src, LinkedListHead<T>** front, Li
         *back = slow->next;
         slow->next = nullptr;
     }
+
+    std::cout << "front:" << *src << std::endl;
+    std::cout << "back:" << **back << std::endl;
 }
 
 template<typename T, class Comparator>
@@ -187,9 +215,6 @@ LinkedListHead<T>* mergelist(LinkedListHead<T>* lstA, LinkedListHead<T>*lstB, Co
         /* advance the merge list ptr */
         lstMerge_ptr = lstMerge_ptr->next;
     }
-
-    /* cap the end of the list */
-    lstMerge_ptr->next = nullptr;
 
     return lstMerge_ptr_head;
 }
